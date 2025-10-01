@@ -18,3 +18,17 @@ router.get('/', (req, res) => {
 });
 
 module.exports = router;
+
+// GET /users/:id
+router.get('/:id', (req, res) => {
+    const { id } = req.params;
+    const user = users.find(u => u.id === id);
+
+    if (!user) {
+        return res.status(404).json({ error: 'Usuario no encontrado' });
+    }
+
+    res.status(200).json(user);
+});
+
+module.exports = router;
