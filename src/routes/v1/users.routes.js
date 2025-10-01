@@ -4,7 +4,7 @@ const router = express.Router();
 // Estado de memoria (simulación)
 let users = [
     {
-        id: "b42f53fa-7b30-4b91-8d36-dc1c6ef27611",
+    id: "b42f53fa-7b30-4b91-8d36-dc1c6ef27611",
     name: "Carlos Navia",
     email: "carlos@example.com",
     role: "user",
@@ -49,9 +49,9 @@ router.post('/', (req, res) => {
         createdAt: new Date().toISOString()
     };
 
-    users.push(newUser); // 4
+    users.push(newUser); 
 
-    res.status(201).json(newUser); // 5
+    res.status(201).json(newUser); 
 });
 
 // PUT /users/:id
@@ -95,22 +95,31 @@ router.delete('/:id', (req, res) => {
 
 module.exports = router;
 
-// GET /users?role=user&search=Mateo
+// GET /users?role=user&search=Carlos
 router.get('/', (req, res) => {
-    const { role, search } = req.query;
-    let result = users;
+  const { role, search } = req.query;  // 1
+  let result = users;                  // 2
 
-    if (role) {
-        result = result.filter(u => u.role === role);
-    }
+  // Aplicar filtros de manera que se combinen correctamente
+  if (role && search) {
+    // Si hay ambos filtros, aplicar AND lógico
+    result = result.filter(u => 
+      u.role === role && 
+      u.name.toLowerCase().includes(search.toLowerCase())
+    );
+  } else if (role) {
+    // Solo filtro por rol
+    result = result.filter(u => u.role === role);
+  } else if (search) {
+    // Solo filtro por búsqueda
+    result = result.filter(u => 
+      u.name.toLowerCase().includes(search.toLowerCase())
+    );
+  }
+  // Si no hay filtros, result mantiene todos los usuarios
 
-    if (search) {
-        result = result.filter(u =>
-            u.name.toLowerCase().includes(search.toLowerCase())
-        );
-    }
-
-    res.status(200).json(result);
+  res.status(200).json(result);        // 5
 });
 
 module.exports = router;
+
