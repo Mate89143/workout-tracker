@@ -94,3 +94,23 @@ router.delete('/:id', (req, res) => {
 });
 
 module.exports = router;
+
+// GET /users?role=user&search=Mateo
+router.get('/', (req, res) => {
+    const { role, search } = req.query;
+    let result = users;
+
+    if (role) {
+        result = result.filter(u => u.role === role);
+    }
+
+    if (search) {
+        result = result.filter(u =>
+            u.name.toLowerCase().includes(search.toLowerCase())
+        );
+    }
+
+    res.status(200).json(result);
+});
+
+module.exports = router;
