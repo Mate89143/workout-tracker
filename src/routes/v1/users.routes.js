@@ -14,7 +14,7 @@ let users = [
 
 // GET /api/v1/users
 router.get('/', (req, res) => {
-    res.send('Get all users');
+    res.status(200).json(users);
 });
 
 module.exports = router;
